@@ -6,3 +6,8 @@ GET /info
 
 GET /api/persons
 
+GET /api/persons/2
+
+GET /api/persons/5
+
+
