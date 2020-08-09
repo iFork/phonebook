@@ -58,6 +58,24 @@ app.delete('/api/persons/:id', (req,res) => {
     res.status(204).end();
 });
 
+const generateId = () => {
+    const upperBound = 500;
+    const lowerBound = 1;
+    return Math.floor(lowerBound + (Math.random() * (upperBound - lowerBound)));
+};
+
+app.use(express.json());
+app.post('/api/persons', (req,res) => {
+    const body = req.body;
+    const person = {
+      name:   body.name,
+      number: body.number,
+      id:     generateId()
+    };
+    persons.push(person);
+    res.json(person);
+});
+
 const port = 3001;
 app.listen(port, () => {
     console.log(`Server listening to port ${port}...`);

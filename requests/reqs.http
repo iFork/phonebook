@@ -10,4 +10,12 @@ GET /api/persons/2
 
 GET /api/persons/5
 
+DELETE /api/persons/2
+
+POST /api/persons
+{
+	"name": "Vio",
+	"number": "123"
+}
+
 
