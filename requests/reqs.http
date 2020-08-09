@@ -18,4 +18,22 @@ POST /api/persons
 	"number": "123"
 }
 
+# name missing
+POST /api/persons
+{
+	"number": "123"
+}
+
+# number missing
+POST /api/persons
+{
+	"name": "Vio"
+}
+
+# name is duplicate
+POST /api/persons
+{
+		"name": "Vio",
+		"number": "123"
+}
 

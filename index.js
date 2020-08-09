@@ -67,6 +67,16 @@ const generateId = () => {
 app.use(express.json());
 app.post('/api/persons', (req,res) => {
     const body = req.body;
+    if(!body.name) {
+        return res.status(400).json({error: "Name missing"});
+    }
+    if(!body.number) {
+        return res.status(400).json({error: "Number missing"});
+    }
+    if(persons.find(p => p.name === body.name)) {
+        console.log(body.name, "exists");
+        return res.status(400).json({error: "Name must be unique"});
+    }
     const person = {
       name:   body.name,
       number: body.number,
