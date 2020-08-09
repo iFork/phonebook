@@ -1,0 +1,8 @@
+Host: http://localhost:3001
+
+GET /
+
+GET /info
+
+GET /api/persons
+
