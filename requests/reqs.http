@@ -33,7 +33,7 @@ POST /api/persons
 # name is duplicate
 POST /api/persons
 {
-		"name": "Vio",
-		"number": "123"
+	"name": "Vio",
+	"number": "123"
 }
 
