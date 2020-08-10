@@ -28,7 +28,13 @@ let persons = [
 const app = express();
 
 // Logging
-app.use(morgan('tiny'));
+// app.use(morgan('tiny'));
+morgan.token('reqBody', (req,res) => JSON.stringify(req.body));
+    // this works due to express.json() middleware initilaizing req.body property 
+    // (see below) with object parsed from request body, effective for POST requests.
+    // Note that :req.body or :req['body'] are not existing format tokens for morgan.
+const format = ':method :url :status :res[content-length] - :response-time ms :reqBody';
+app.use(morgan(format));
 
 app.get('/', (req,res) => {
     res.send("<h1>Hello world</h1>");
