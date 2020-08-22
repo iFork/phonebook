@@ -1,5 +1,6 @@
 
 const express = require('express');
+const cors = require('cors');
 const morgan = require('morgan');
 
 let persons = [
@@ -26,6 +27,9 @@ let persons = [
 ];
 
 const app = express();
+
+//enable cross-origin resource sharing 
+app.use(cors());
 
 // Logging
 // app.use(morgan('tiny'));
