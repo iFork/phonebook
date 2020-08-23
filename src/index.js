@@ -40,9 +40,12 @@ morgan.token('reqBody', (req,res) => JSON.stringify(req.body));
 const format = ':method :url :status :res[content-length] - :response-time ms :reqBody';
 app.use(morgan(format));
 
-app.get('/', (req,res) => {
-    res.send("<h1>Hello world</h1>");
-});
+//serve static pages of frontend
+app.use(express.static('build'));
+
+// app.get('/', (req,res) => {
+//     res.send("<h1>Hello world</h1>");
+// });
 
 app.get('/info', (req,res) => {
     const msg = 
