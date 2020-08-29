@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui":"echo remove current build && rm -r build && echo cd to part2/phonebook && cd ../../fso-exercises/part2/phonebook && echo remove old build && rm -r build && echo run build && npm run build --prod && echo copy build to $OLDPWD && cp -r build $OLDPWD"
+    "build:ui": "echo remove current build && rm -r build && echo cd to part2/phonebook && cd ../../fso-exercises/part2/phonebook && echo remove old build && rm -r build && echo run build && npm run build --prod && echo copy build to $OLDPWD && cp -r build $OLDPWD"
   },
   "author": "M",
   "license": "MIT",
@@ -17,6 +17,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongoose": "^5.10.1",
     "morgan": "^1.10.0"
   }
 }
