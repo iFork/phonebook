@@ -1,37 +1,23 @@
+// use dotenv also here, as this can be run on its own
+require('dotenv').config();
+
+const Person = require('./models/person');
+// need mangoose also here, to be able to close connection 
+// and terminate this CL utility (as this is run not as a server).
 const mongoose = require('mongoose');
 
-
 const argc = process.argv.length;
-const usage = "Usage: node <this file> <password> [<name> <number>]"
+// const usage = "Usage: node <this file> <password> [<name> <number>]"
+const usage = "Usage: node <this file> [<name> <number>]"
 
+const argcBaseCase = 2;
+const argcAddPerson = 4;
 // Terminate on argument count mismatch
-if (!(argc === 3 || argc === 5)) {
+if (!(argc === argcBaseCase || argc === argcAddPerson)) {
+    console.log(argc);
     console.log(`Argument mismatch. ${usage}`);
     process.exit(1);
 }
-
-// mongodb connection string
-const password = process.argv[2];
-const user = 'fso';
-const dbname = 'phonebook-app';
-const uri = `mongodb+srv://${user}:${password}@cluster0.ubqcg.mongodb.net/`
-            + `${dbname}?retryWrites=true&w=majority`;
-
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true})
-    .then(res => {
-        // console.log("Connect result", res);
-        console.log("Connect succeeded");
-    });
-
-const personSchema = new mongoose.Schema({
-    name: String,
-    phone: String
-});
-
-// compile model (class / c-tor) on a schema
-// > If you define a model with the name *Person*, mongoose will automatically
-// name the associated collection as *people*.
-const Person = mongoose.model('Person', personSchema);
 
 
 const addPerson = (name, phone) => {
@@ -73,14 +59,14 @@ const getAll = () => {
 }
 
 switch (argc) {
-    case 3:
+    case argcBaseCase:
         //Fetch all
         getAll();
         break;
-    case 5:
+    case argcAddPerson:
         //Add contact 
-        const name = process.argv[3];
-        const phone = process.argv[4];
+        const name = process.argv[2];
+        const phone = process.argv[3];
         addPerson(name, phone);
         break;
     default:

@@ -1,30 +1,11 @@
 
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-
-let persons = [
-    {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Marko",
-      "number": "060-123-890",
-      "id": 4
-    }
-];
+//mongoose models
+const Person = require('./models/person');
 
 const app = express();
 
@@ -55,18 +36,32 @@ app.get('/info', (req,res) => {
 });
 
 app.get('/api/persons', (req,res) => {
-    res.json(persons);
+    Person.find({})
+        .then(persons => {
+            res.json(persons);
+        })
+        .catch(err => {
+            console.log("error in find all:", err.message);
+            res.status(500).end();
+        });
 });
 
 app.get('/api/persons/:id', (req,res) => {
-    const id = Number(req.params.id);
-    const person = persons.find(p => p.id === id);
-    if (person) {
-        res.json(person);
-    }
-    else {
-        res.status(404).end();
-    }
+    // const id = Number(req.params.id);
+    const id = req.params.id;
+    // const person = persons.find(p => p.id === id);
+    Person.findById(id)
+        .then(person => {
+            if (person) res.json(person);
+            else {
+                console.log("id not found");
+                res.status(404).end();
+            }
+        })
+        .catch(err => {
+            console.log("error in foundById:", err.message);
+            res.status(404).end();
+        });
 });
 
 app.delete('/api/persons/:id', (req,res) => {
@@ -104,7 +99,9 @@ app.post('/api/persons', (req,res) => {
 });
 
 //get Heroku port or our preferred port for localhost
-const port = process.env.PORT || 3001;
+// const port = process.env.PORT || 3001;
+// now using dotenv
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server listening to port ${port}...`);
 })
