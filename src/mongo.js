@@ -20,13 +20,13 @@ if (!(argc === argcBaseCase || argc === argcAddPerson)) {
 }
 
 
-const addPerson = (name, phone) => {
+const addPerson = (name, number) => {
     const person = new Person({
         name,
-        phone
+        number
     });
     person.save().then(result => {
-        console.log("Added", result.name, result.phone, "to phonebook");
+        console.log("Added", result.name, result.number, "to phonebook");
         mongoose.connection.close()
             .then(() => console.log("Connection closed"));
     })
@@ -50,7 +50,7 @@ const getAll = () => {
     // callbacks are reached and print the messages.
     Person.find({})
         .then(people => {
-            people.forEach(person => console.log(person.name, person.phone));
+            people.forEach(person => console.log(person.name, person.number));
             mongoose.connection.close().then(() => {
                 console.log("Connection closed");
             });
@@ -66,8 +66,8 @@ switch (argc) {
     case argcAddPerson:
         //Add contact 
         const name = process.argv[2];
-        const phone = process.argv[3];
-        addPerson(name, phone);
+        const number = process.argv[3];
+        addPerson(name, number);
         break;
     default:
         console.log(`Argument mismatch. ${usage}`);

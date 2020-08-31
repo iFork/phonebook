@@ -12,7 +12,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true})
 
 const personSchema = new mongoose.Schema({
     name: String,
-    phone: String
+    number: String
 });
 
 //modify toJSON method to fit frontend needs and conventions
