@@ -13,6 +13,8 @@ GET /api/persons/5f491e049192b639242598eb
 
 GET /api/persons/5f491e049192b639242598eA
 
+DELETE /api/persons/5f491e049192b639242598eA
+
 DELETE /api/persons/2
 
 POST /api/persons

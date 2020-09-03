@@ -60,17 +60,17 @@ app.get('/api/persons/:id', (req,res) => {
         });
 });
 
-app.delete('/api/persons/:id', (req,res) => {
-    const id = Number(req.params.id);
-    persons = persons.filter(p => p.id !== id);
-    res.status(204).end();
+app.delete('/api/persons/:id', (req,res,next) => {
+    const id = req.params.id;
+    Person.findByIdAndRemove(id)
+        .then(deletedPerson => {
+            if (deletedPerson) {
+                return res.status(204).end();
+            }
+            return res.status(404).end();
+        })
+        .catch(err => next(err));
 });
-
-// const generateId = () => {
-    // const upperBound = 500;
-    // const lowerBound = 1;
-    // return Math.floor(lowerBound + (Math.random() * (upperBound - lowerBound)));
-// };
 
 app.use(express.json());
 app.post('/api/persons', (req,res) => {
