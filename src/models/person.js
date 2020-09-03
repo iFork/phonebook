@@ -1,5 +1,7 @@
 
 const mongoose = require('mongoose');
+//configure per deprecation warning
+mongoose.set('useFindAndModify', false);
 
 // use dotenv to get env variables
 const uri = process.env.MONGODB_URI;

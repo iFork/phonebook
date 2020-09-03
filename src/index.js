@@ -31,40 +31,35 @@ app.get('/info', (req,res) => {
     res.send(msg);
 });
 
-app.get('/api/persons', (req,res) => {
+app.get('/api/persons', (req,res,next) => {
     Person.find({})
         .then(persons => {
             res.json(persons);
         })
-        .catch(err => {
-            console.log("error in find all:", err.message);
-            res.status(500).end();
-        });
+        .catch(err => next(err));
 });
 
-app.get('/api/persons/:id', (req,res) => {
-    // const id = Number(req.params.id);
+app.get('/api/persons/:id', (req,res,next) => {
     const id = req.params.id;
-    // const person = persons.find(p => p.id === id);
     Person.findById(id)
+        .orFail()
         .then(person => {
-            if (person) res.json(person);
-            else {
-                console.log("id not found");
-                res.status(404).end();
-            }
+            res.json(person);
         })
-        .catch(err => {
-            console.log("error in foundById:", err.message);
-            res.status(404).end();
-        });
+        .catch(err => next(err));
 });
 
 app.delete('/api/persons/:id', (req,res,next) => {
     const id = req.params.id;
+    // Person.findOneAndRemove({_id: id})
     Person.findByIdAndRemove(id)
+    //Note: bug reported, issue #9381
+    //orFail() does not work with findByIdAndRemove
+        // .orFail()
         .then(deletedPerson => {
+            // since orFail() does not work
             if (deletedPerson) {
+                console.log("deleted:", deletedPerson);
                 return res.status(204).end();
             }
             return res.status(404).end();
@@ -73,7 +68,7 @@ app.delete('/api/persons/:id', (req,res,next) => {
 });
 
 app.use(express.json());
-app.post('/api/persons', (req,res) => {
+app.post('/api/persons', (req,res,next) => {
     const body = req.body;
     if(!body.name) {
         return res.status(400).json({error: "Name missing"});
@@ -88,15 +83,25 @@ app.post('/api/persons', (req,res) => {
     const person = new Person({
         name:   body.name,
         number: body.number
-        // id:     generateId()
     });
     person.save()
         .then(savedPerson => res.json(savedPerson))
-        .catch(err => {
-            console.log("save error", err.message);
-            res.status(500).json({error: "Save error"});
-        });
+        .catch(err => next(err));
 });
+
+//for checking mongoose error types
+const mongoose = require('mongoose');
+const errorHandler = (err, req, res, next) => {
+    if (err instanceof mongoose.Error.DocumentNotFoundError) {
+        return res.status(404).json({error: "Document Not Found"})
+    }
+    if (err instanceof mongoose.Error.CastError) { //or err.name === 'CastError'
+        return res.status(400).json({error: "Cast Error, Malformatted id"});
+    }
+    // return res.status(500).json({error: "Internal Error"});
+    next(err);
+}
+app.use(errorHandler);
 
 //get Heroku port or our preferred port for localhost
 // const port = process.env.PORT || 3001;
