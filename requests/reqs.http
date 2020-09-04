@@ -11,6 +11,12 @@ GET /api/persons/2
 
 GET /api/persons/5f491e049192b639242598eb
 
+PUT /api/persons/5f491e049192b639242598eb
+{
+    "name": "AhamAli",
+    "number": "9090"
+}
+
 GET /api/persons/5f491e049192b639242598eA
 
 DELETE /api/persons/5f491e049192b639242598eA
@@ -22,6 +28,14 @@ POST /api/persons
 	"name": "Vio",
 	"number": "123"
 }
+
+PUT /api/persons/5f5228a6fba89145ccc003a7
+{
+	"name": "Vio",
+	"number": "003"
+}
+
+GET /api/persons/5f5228a6fba89145ccc003a7
 
 # name missing
 POST /api/persons

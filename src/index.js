@@ -1,5 +1,7 @@
 
 require('dotenv').config();
+//for checking mongoose error types
+const mongoose = require('mongoose');
 
 const express = require('express');
 const cors = require('cors');
@@ -89,8 +91,17 @@ app.post('/api/persons', (req,res,next) => {
         .catch(err => next(err));
 });
 
-//for checking mongoose error types
-const mongoose = require('mongoose');
+app.put('/api/persons/:id', (req,res,next) => {
+    const id = req.params.id;
+    const body = req.body;
+    Person.findByIdAndUpdate(id, {$set: {number: body.number}}, {new: true})
+        .orFail()
+        .then(updatedPerson => {
+            res.json(updatedPerson);
+        })
+        .catch(err => next(err));
+})
+
 const errorHandler = (err, req, res, next) => {
     if (err instanceof mongoose.Error.DocumentNotFoundError) {
         return res.status(404).json({error: "Document Not Found"})
