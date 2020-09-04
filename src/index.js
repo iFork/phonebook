@@ -26,11 +26,15 @@ app.use(morgan(format));
 //serve static pages of frontend
 app.use(express.static('build'));
 
-app.get('/info', (req,res) => {
-    const msg = 
-    `<p>Phonebook contains info for ${persons.length} people.</p>
-    <p>${new Date()}</p>` ;
-    res.send(msg);
+app.get('/info', (req,res,next) => {
+    const count = Person.countDocuments({}).exec();
+    count.then( returned => {
+        const msg = 
+        `<p>Phonebook contains info for ${returned} people.</p>
+        <p>${new Date()}</p>` ;
+        res.send(msg);
+    })
+        .catch(err => next(err));
 });
 
 app.get('/api/persons', (req,res,next) => {
