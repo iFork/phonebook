@@ -1,7 +1,11 @@
 
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
+
 //configure per deprecation warning
 mongoose.set('useFindAndModify', false);
+//following is needed for mongoose-unique-validator
+mongoose.set('useCreateIndex', true);
 
 // use dotenv to get env variables
 const uri = process.env.MONGODB_URI;
@@ -13,9 +17,21 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true})
     });
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
+    name: {
+        type: String,
+        required: true,
+        minlength: 2,
+        unique: true
+    },
+    number: {
+        type: String,
+        minlength: 3,
+        required: true
+    }
 });
+
+//plug uniqueValidator
+personSchema.plugin(uniqueValidator);
 
 //modify toJSON method to fit frontend needs and conventions
 // id instead of _id, no __v property

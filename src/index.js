@@ -76,12 +76,13 @@ app.delete('/api/persons/:id', (req,res,next) => {
 app.use(express.json());
 app.post('/api/persons', (req,res,next) => {
     const body = req.body;
-    if(!body.name) {
-        return res.status(400).json({error: "Name missing"});
-    }
-    if(!body.number) {
-        return res.status(400).json({error: "Number missing"});
-    }
+    // following checks are moved to validator
+    // if(!body.name) {
+    //     return res.status(400).json({error: "Name missing"});
+    // }
+    // if(!body.number) {
+    //     return res.status(400).json({error: "Number missing"});
+    // }
     // if(persons.find(p => p.name === body.name)) {
     //     console.log(body.name, "exists");
     //     return res.status(400).json({error: "Name must be unique"});
@@ -112,6 +113,9 @@ const errorHandler = (err, req, res, next) => {
     }
     if (err instanceof mongoose.Error.CastError) { //or err.name === 'CastError'
         return res.status(400).json({error: "Cast Error, Malformatted id"});
+    }
+    if (err.name === 'ValidationError') {
+        return res.status(400).json({error: err.message});
     }
     // return res.status(500).json({error: "Internal Error"});
     next(err);
