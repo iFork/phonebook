@@ -99,7 +99,11 @@ app.post('/api/persons', (req,res,next) => {
 app.put('/api/persons/:id', (req,res,next) => {
     const id = req.params.id;
     const body = req.body;
-    Person.findByIdAndUpdate(id, {$set: {number: body.number}}, {new: true})
+    const opts = {
+        new: true, //return updated doc, by default old is returned
+        runValidators: true //validators, by default, run only after save()
+    }
+    Person.findByIdAndUpdate(id, {$set: {number: body.number}}, opts)
         .orFail()
         .then(updatedPerson => {
             res.json(updatedPerson);
@@ -116,8 +120,8 @@ const errorHandler = (err, req, res, next) => {
     }
     if (err.name === 'ValidationError') {
         return res.status(400).json({error: err.message});
+        // return res.status(400).json({error: err});
     }
-    // return res.status(500).json({error: "Internal Error"});
     next(err);
 }
 app.use(errorHandler);
