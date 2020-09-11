@@ -7,18 +7,22 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "echo remove current build && rm -r build && echo cd to part2/phonebook && cd ../../fso-exercises/part2/phonebook && echo remove old build && rm -r build && echo run build && npm run build --prod && echo copy build to $OLDPWD && cp -r build $OLDPWD"
+    "build:ui": "echo remove current build && rm -r build && echo cd to part2/phonebook && cd ../../fso-exercises/part2/phonebook && echo remove old build && rm -r build && echo run build && npm run build --prod && echo copy build to $OLDPWD && cp -r build $OLDPWD",
+    "lint": "npx eslint ."
   },
   "author": "M",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.10.3",
+    "mongoose": "^5.10.4",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0"
   }
